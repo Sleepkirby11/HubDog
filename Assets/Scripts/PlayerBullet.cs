@@ -17,7 +17,7 @@ public class PlayerBullet : MonoBehaviour
     {
         rigid.transform.position += transform.up * Time.deltaTime * 10;
 
-        if(transform.position.y > 10)
+        if (transform.position.y > 10)
         {
             gameObject.SetActive(false);
         }
