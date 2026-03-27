@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 913c43c3bc2ca2341be6333cb8367002
+guid: d9c0d2afe2e9c7547b0cc0d1b46de4a4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -749211068984312777
-    second: Default_hubDog_0
+      213: -996393374707018360
+    second: Default_hubDog 1_0
   - first:
-      213: -1476295598627409062
-    second: Default_hubDog_1
+      213: 3857915383684023807
+    second: Default_hubDog 1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,7 +116,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Default_hubDog_0
+      name: Default_hubDog 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -124,21 +124,21 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 73c366390844a95f0800000000000000
-      internalID: -749211068984312777
+      spriteID: 885190c31891c22f0800000000000000
+      internalID: -996393374707018360
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Default_hubDog_1
+      name: Default_hubDog 1_1
       rect:
         serializedVersion: 2
         x: 48
@@ -146,15 +146,15 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a53375c89f4238be0800000000000000
-      internalID: -1476295598627409062
+      spriteID: ff54002f9911a8530800000000000000
+      internalID: 3857915383684023807
       vertices: []
       indices: 
       edges: []
@@ -163,7 +163,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: a4c9069d4cddd0d46902d53a5964bb09
+    spriteID: 8e2387f8fdd9bc442bec3d3f0ffeb151
     internalID: 0
     vertices: []
     indices: 
@@ -173,8 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Default_hubDog_0: -749211068984312777
-      Default_hubDog_1: -1476295598627409062
+      Default_hubDog 1_0: -996393374707018360
+      Default_hubDog 1_1: 3857915383684023807
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
