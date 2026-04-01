@@ -70,9 +70,20 @@
                 },
                 {
                     "name": "",
+                    "id": "4339f358-13ea-4c78-8b1a-b20c4a7a13f7",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shooting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e351dde3-ed37-4f89-8cd7-59e64b71d95d",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "Press",
+                    "interactions": "",
                     "processors": "",
                     "groups": ";PC",
                     "action": "Shooting",

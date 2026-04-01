@@ -134,6 +134,7 @@ public class Player : MonoBehaviour
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(0);
         bullet.transform.position = transform.GetChild(0).transform.position;
+        bullet.transform.eulerAngles = transform.GetChild(0).transform.eulerAngles;
     }
 
     void Die()
