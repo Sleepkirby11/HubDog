@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private Vector2 inputVec;
     SpriteRenderer sprite;
     Animator anim;
-    BoxCollider2D col;
+    CapsuleCollider2D col;
 
 
     public float FireDelay;
@@ -20,9 +20,9 @@ public class Player : MonoBehaviour
     public int hp;
     public int maxHp;
 
-    private bool isParrying;
+    public bool isParrying;
     private bool isGround;
-    private bool isShooting;
+    public bool isShooting;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        col = GetComponent<CapsuleCollider2D>();
 
         currentDelay = 0;
         isParrying = false;
@@ -132,7 +133,7 @@ public class Player : MonoBehaviour
         // Shoot
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(0);
-        bullet.transform.position = transform.position;
+        bullet.transform.position = transform.GetChild(0).transform.position;
     }
 
     void Die()

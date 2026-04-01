@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 4ad962c92bb20944bbd3afaf51ee6590
+guid: af72ef05ad127d0438d941a475f56d4e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7120763230950479786
-    second: Shooting_hubDog_0
+      213: -8477773735788576026
+    second: Shooting_hubDog1_0
   - first:
-      213: -4198255575663605412
-    second: Shooting_hubDog_1
+      213: 3616624470635687132
+    second: Shooting_hubDog1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,7 +116,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shooting_hubDog_0
+      name: Shooting_hubDog1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,20 +131,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 658a881a197fd2d90800000000000000
-      internalID: -7120763230950479786
+      spriteID: 6e28f2854b5e85a80800000000000000
+      internalID: -8477773735788576026
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shooting_hubDog_1
+      name: Shooting_hubDog1_1
       rect:
         serializedVersion: 2
         x: 48
         y: 0
         width: 48
-        height: 33
+        height: 38
       alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +153,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5984481cccccb5c0800000000000000
-      internalID: -4198255575663605412
+      spriteID: cdca93a5bc4d03230800000000000000
+      internalID: 3616624470635687132
       vertices: []
       indices: 
       edges: []
@@ -163,7 +163,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4711121aa21f3e841a69e98e90357fd4
+    spriteID: 7129cb5e34a4a4f4ea4c8535bfb8797a
     internalID: 0
     vertices: []
     indices: 
@@ -173,8 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Shooting_hubDog_0: -7120763230950479786
-      Shooting_hubDog_1: -4198255575663605412
+      Shooting_hubDog1_0: -8477773735788576026
+      Shooting_hubDog1_1: 3616624470635687132
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

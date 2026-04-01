@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 4ad962c92bb20944bbd3afaf51ee6590
+guid: 7698a2d872abba94da7e916003e1c5bf
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7120763230950479786
-    second: Shooting_hubDog_0
+      213: 8312377626669281794
+    second: Shooting_hubDog2_0
   - first:
-      213: -4198255575663605412
-    second: Shooting_hubDog_1
+      213: 6916315212938676183
+    second: Shooting_hubDog2_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shooting_hubDog_0
+      name: Shooting_hubDog2_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 48
-        height: 48
+        height: 40
       alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,20 +131,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 658a881a197fd2d90800000000000000
-      internalID: -7120763230950479786
+      spriteID: 202f68c196f7b5370800000000000000
+      internalID: 8312377626669281794
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shooting_hubDog_1
+      name: Shooting_hubDog2_1
       rect:
         serializedVersion: 2
         x: 48
         y: 0
         width: 48
-        height: 33
+        height: 39
       alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +153,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5984481cccccb5c0800000000000000
-      internalID: -4198255575663605412
+      spriteID: 7d707ddba00bbff50800000000000000
+      internalID: 6916315212938676183
       vertices: []
       indices: 
       edges: []
@@ -163,7 +163,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4711121aa21f3e841a69e98e90357fd4
+    spriteID: d894d3de846facc43b41eb3c031b1ad4
     internalID: 0
     vertices: []
     indices: 
@@ -173,8 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Shooting_hubDog_0: -7120763230950479786
-      Shooting_hubDog_1: -4198255575663605412
+      Shooting_hubDog2_0: 8312377626669281794
+      Shooting_hubDog2_1: 6916315212938676183
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

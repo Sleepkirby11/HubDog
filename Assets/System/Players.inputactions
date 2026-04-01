@@ -49,7 +49,7 @@
                 {
                     "name": "left",
                     "id": "b867fc25-b53e-4184-b2b0-948fc038b69a",
-                    "path": "<Keyboard>/leftArrow",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC",
@@ -60,7 +60,7 @@
                 {
                     "name": "right",
                     "id": "430d6d92-13b1-4ea2-9ffc-1ef00e956555",
-                    "path": "<Keyboard>/rightArrow",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC",
@@ -71,8 +71,8 @@
                 {
                     "name": "",
                     "id": "e351dde3-ed37-4f89-8cd7-59e64b71d95d",
-                    "path": "<Keyboard>/x",
-                    "interactions": "",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": ";PC",
                     "action": "Shooting",
@@ -82,7 +82,7 @@
                 {
                     "name": "",
                     "id": "80328fbc-c5a8-4ffe-88f5-41b7a1f5744d",
-                    "path": "<Keyboard>/z",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC",
