@@ -13,7 +13,7 @@ public class Spawner : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            GameObject enemy = GameManager.instance.pool.Get(2);
+            GameObject enemy = GameManager.instance.pool.Get(3);
             enemy.transform.position = new Vector3(Random.Range(-5, 5), 8, 0);
         }
     }

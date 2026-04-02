@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     Animator anim;
     CapsuleCollider2D col;
 
+    public GameObject Shield;
+
 
     public float FireDelay;
     private float currentDelay;
@@ -133,8 +135,8 @@ public class Player : MonoBehaviour
         // Shoot
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(0);
-        bullet.transform.position = transform.GetChild(0).transform.position;
-        bullet.transform.eulerAngles = transform.GetChild(0).transform.eulerAngles;
+        bullet.transform.position = Shield.gameObject.transform.position;
+        bullet.transform.eulerAngles = Shield.gameObject.transform.eulerAngles;
     }
 
     void Die()
@@ -156,16 +158,7 @@ public class Player : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("EnemyBullet"))
         {
-            if(isParrying)
-            {
-                collision.gameObject.SetActive(false);
-                GameObject bullet = GameManager.instance.pool.Get(0);
-                bullet.transform.position = transform.position;
-            }
-            else
-            {
-                hp--;
-            }
+            hp--;
         }
     }
 }

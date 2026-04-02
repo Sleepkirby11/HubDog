@@ -75,9 +75,13 @@ public class Enemy : MonoBehaviour
     //Shooting
     void Shoot()
     {
+        Vector2 dir = target.position - transform.position;
+        float rot = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(1);
         bullet.transform.position = transform.position;
+        bullet.transform.rotation = Quaternion.Euler(0, 0, rot - 90);
     }
 
     //Die

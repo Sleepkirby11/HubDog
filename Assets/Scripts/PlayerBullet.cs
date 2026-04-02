@@ -4,6 +4,7 @@ public class PlayerBullet : MonoBehaviour
 {
     Rigidbody2D rigid;
 
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
