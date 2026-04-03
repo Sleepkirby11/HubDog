@@ -108,6 +108,14 @@ public class Player : MonoBehaviour
             isGround = false;
         }
     }
+
+    public void ActionMenu(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            GameManager.instance.ActiveMenu();
+        }
+    }
     
     //OnParry, OffParry는 각각 Animator에 의해 호출
     void OnParry()
@@ -160,6 +168,7 @@ public class Player : MonoBehaviour
         {
             collision.gameObject.SetActive(false);
             hp--;
+            GameManager.instance.UpdateLifeBar();
         }
     }
 }
