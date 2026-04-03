@@ -47,17 +47,10 @@ public class Player : MonoBehaviour
         Vector2 nextVec = inputVec * speed;
         rigid.linearVelocityX = nextVec.x;
 
-        if(isShooting)
-        {
             if (currentDelay < FireDelay)
                 currentDelay += Time.deltaTime;
-        }
-        else
-        {
-            currentDelay = 0;
-        }
         //패링과 발사 과정을 따로 구분하기 위해 현재 애니메이션 상태 감지 + 발사 텀 체크
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("shoot") && currentDelay >= FireDelay)
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("shoot") && currentDelay >=(FireDelay / 2))
         {
             Shooting();
         }
@@ -119,7 +112,14 @@ public class Player : MonoBehaviour
     //OnParry, OffParry는 각각 Animator에 의해 호출
     void OnParry()
     {
-        isParrying = true;
+        if (currentDelay >= FireDelay)
+        {
+            currentDelay = 0;
+            isParrying = true;
+            GameObject Ting = GameManager.instance.pool.Get(4);
+            Ting.transform.position = Shield.transform.position;
+            Ting.transform.eulerAngles = Shield.transform.eulerAngles;
+        }
     }
     void OffParry()
     {
@@ -158,6 +158,7 @@ public class Player : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("EnemyBullet"))
         {
+            collision.gameObject.SetActive(false);
             hp--;
         }
     }

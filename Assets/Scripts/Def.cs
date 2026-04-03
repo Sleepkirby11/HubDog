@@ -3,6 +3,7 @@ using UnityEngine;
 public class Def : MonoBehaviour
 {
     Rigidbody2D rigid;
+    SpriteRenderer spriteRenderer;
 
     Vector2 mouse;
     Transform target;
@@ -12,6 +13,7 @@ public class Def : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
 
         angle = 0;
@@ -29,15 +31,10 @@ public class Def : MonoBehaviour
         this.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    
+    void Glow()
     {
-        if (collision.gameObject.CompareTag("EnemyBullet") && GameManager.instance.player.isParrying)
-        {
-            GameObject bullet = GameManager.instance.pool.Get(2);
-            bullet.transform.position = transform.position;
-            bullet.transform.eulerAngles = collision.gameObject.GetComponent<EnemyBullet>().ReverseRotate();
-            collision.gameObject.SetActive(false);
-        }
-
+        if (GameManager.instance.player.isParrying)
+            spriteRenderer.color = Color.white;
     }
 }

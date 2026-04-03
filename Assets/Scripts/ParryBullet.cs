@@ -3,6 +3,7 @@ using UnityEngine;
 public class ParryBullet : MonoBehaviour
 {
     Rigidbody2D rigid;
+    public int damage = 5;
 
 
     private void Awake()

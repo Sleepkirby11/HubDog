@@ -81,7 +81,7 @@ public class Enemy : MonoBehaviour
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(1);
         bullet.transform.position = transform.position;
-        bullet.transform.rotation = Quaternion.Euler(0, 0, rot - 90);
+        bullet.transform.rotation = Quaternion.Euler(0, 0, (rot - 90) + Random.Range(-10, 10));
     }
 
     //Die
@@ -97,11 +97,15 @@ public class Enemy : MonoBehaviour
         {
             collision.gameObject.SetActive(false);
             hp--;
-
-            if (hp <= 0)
-            {
-                Die();
-            }
+        }
+        if(collision.CompareTag("ParryBullet"))
+        {
+            collision.gameObject.SetActive(false);
+            hp -= collision.gameObject.GetComponent<ParryBullet>().damage;
+        }
+        if (hp <= 0)
+        {
+            Die();
         }
     }
 }
