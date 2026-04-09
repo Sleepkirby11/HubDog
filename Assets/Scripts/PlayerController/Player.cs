@@ -11,12 +11,17 @@ public class Player : MonoBehaviour
     SpriteRenderer sprite;
     Animator anim;
     CapsuleCollider2D col;
+    LineRenderer line;
+    Vector2 mouse;
+    private Vector3[] linePoints = new Vector3[2];
 
     public GameObject Shield;
+    float shieldDistance;
 
 
     public float FireDelay;
-    private float currentDelay;
+    public float currentDelay;
+
 
     public float speed;
     public int hp;
@@ -34,21 +39,34 @@ public class Player : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider2D>();
+        line = GetComponent<LineRenderer>();
 
         currentDelay = 0;
         isParrying = false;
         isGround = true;
         hp = maxHp;
+        line.SetPosition(0, transform.position);
+        shieldDistance = 0;
+    }
+
+    void Update()
+    {
+        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        shieldDistance = Vector2.Distance(this.transform.position, mouse);
+        Debug.Log(mouse);
+
+        if (shieldDistance < 2f)
+            line.SetPosition(1, mouse);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector2 nextVec = inputVec * speed;
         rigid.linearVelocityX = nextVec.x;
 
             if (currentDelay < FireDelay)
-                currentDelay += Time.deltaTime;
+                currentDelay += Time.fixedDeltaTime;
         //패링과 발사 과정을 따로 구분하기 위해 현재 애니메이션 상태 감지 + 발사 텀 체크
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("shoot") && currentDelay >=(FireDelay / 2))
         {

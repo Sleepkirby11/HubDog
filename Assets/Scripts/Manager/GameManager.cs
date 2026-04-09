@@ -13,16 +13,20 @@ public class GameManager : MonoBehaviour
     public Image[] Lifes;
 
     public GameObject Menu;
+    public Slider delay;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        instance = this;
+        if(instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        delay.value = player.currentDelay / player.FireDelay;
     }
 
     public void UpdateLifeBar()
