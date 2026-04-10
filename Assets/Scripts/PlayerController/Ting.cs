@@ -16,17 +16,12 @@ public class Ting : MonoBehaviour
         anim = GetComponent<Animator>();
         this.anim.SetTrigger("Ting");
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("EnemyBullet") && GameManager.instance.player.isParrying)
         {
-            GameObject bullet = GameManager.instance.pool.Get(2);
+            GameObject bullet = GameManager.instance.pool.Get(3);
             bullet.transform.position = transform.position;
             bullet.transform.eulerAngles = collision.gameObject.GetComponent<EnemyBullet>().ReverseRotate();
             collision.gameObject.SetActive(false);
@@ -35,7 +30,6 @@ public class Ting : MonoBehaviour
     }
     void Disabled()
     {
-        Debug.Log("호출되었다");
         this.gameObject.SetActive(false);
     }
 }

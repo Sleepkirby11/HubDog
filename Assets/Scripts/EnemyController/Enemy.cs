@@ -1,9 +1,13 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     Rigidbody2D rigid;
     BoxCollider2D col;
+    LineRenderer line;
+
+    public int type;
 
     //타겟 설정
     Transform target;
@@ -21,19 +25,33 @@ public class Enemy : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
+        line = GetComponent<LineRenderer>();
+
         distance = 0;
         currentDelay = 0;
         nextMove = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        currentDelay += Time.deltaTime;
+        line.SetPosition(0, this.transform.position);
+
+        line.SetPosition(1, target.transform.position);
+        
+        currentDelay += Time.fixedDeltaTime; 
 
         if(currentDelay >= maxDelay)
         {
-            Shoot();
+            switch(type)
+            {
+                case 0:
+                    Shoot_0();
+                    break;
+                case 1:
+                    Shoot_1();
+                    break;
+            }
         }
 
         DistanceMove();
@@ -54,16 +72,16 @@ public class Enemy : MonoBehaviour
         distance = Mathf.Abs(target.transform.position.x - this.transform.position.x);
         rigid.linearVelocityX = nextMove;
 
-        if (distance >= 4)
+        if (distance >= 4 && distance < 8)
         {
             //이동 방향 설정
             if (target.transform.position.x - rigid.position.x < 0)
             {
-                nextMove = -10f;
+                nextMove = -5f;
             }
             else if(target.transform.position.x - rigid.position.x > 0)
             {
-                nextMove = 10f;
+                nextMove = 5f;
             }
         }
         else if (distance <= 0.1f)
@@ -73,15 +91,29 @@ public class Enemy : MonoBehaviour
     }
 
     //Shooting
-    void Shoot()
+    void Shoot_0()
     {
         Vector2 dir = target.position - transform.position;
         float rot = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(1);
-        bullet.transform.position = transform.position;
-        bullet.transform.rotation = Quaternion.Euler(0, 0, (rot - 90) + Random.Range(-10, 10));
+        bullet.transform.position = line.GetPosition(0);
+        bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, line.GetPosition(1) - transform.position);
+    }
+
+    void Shoot_1()
+    {
+        Vector2 dir = target.position - transform.position;
+        float rot = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        currentDelay = 0;
+        GameObject bullet = GameManager.instance.pool.Get(2);
+        bullet.transform.position = line.GetPosition(0);
+        bullet.GetComponent<EnemyBullet>().target = target;
+        bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, 
+            (line.GetPosition(1) - transform.position));
+        bullet.transform.eulerAngles += new Vector3(0, 0, Random.Range(-15, 15));
     }
 
     //Die

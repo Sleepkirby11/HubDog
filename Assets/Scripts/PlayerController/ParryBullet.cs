@@ -11,9 +11,9 @@ public class ParryBullet : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        rigid.transform.position += transform.up * Time.deltaTime * 20;
+        rigid.linearVelocity = transform.up * 20;
 
         if (transform.position.y > 10)
         {

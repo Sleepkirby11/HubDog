@@ -11,12 +11,8 @@ public class Player : MonoBehaviour
     SpriteRenderer sprite;
     Animator anim;
     CapsuleCollider2D col;
-    LineRenderer line;
-    Vector2 mouse;
-    private Vector3[] linePoints = new Vector3[2];
 
     public GameObject Shield;
-    float shieldDistance;
 
 
     public float FireDelay;
@@ -39,24 +35,11 @@ public class Player : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider2D>();
-        line = GetComponent<LineRenderer>();
 
         currentDelay = 0;
         isParrying = false;
         isGround = true;
         hp = maxHp;
-        line.SetPosition(0, transform.position);
-        shieldDistance = 0;
-    }
-
-    void Update()
-    {
-        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        shieldDistance = Vector2.Distance(this.transform.position, mouse);
-        Debug.Log(mouse);
-
-        if (shieldDistance < 2f)
-            line.SetPosition(1, mouse);
     }
 
     // Update is called once per frame
@@ -142,7 +125,7 @@ public class Player : MonoBehaviour
         {
             currentDelay = 0;
             isParrying = true;
-            GameObject Ting = GameManager.instance.pool.Get(4);
+            GameObject Ting = GameManager.instance.pool.Get(6);
             Ting.transform.position = Shield.transform.position;
             Ting.transform.eulerAngles = Shield.transform.eulerAngles;
         }
@@ -173,7 +156,8 @@ public class Player : MonoBehaviour
     //점프 후 착지 판정
     private void OnCollisionEnter2D(Collision2D collision)
     {  
-        if(collision.gameObject.CompareTag("Ground"))
+        if(collision.gameObject.CompareTag("Ground") &&
+            collision.gameObject.transform.position.y < this.gameObject.transform.position.y)
         {
             isGround = true;
         }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1747052123261714143}
   - component: {fileID: 4115970812367071136}
   - component: {fileID: 8027115276133284901}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ting
   m_TagString: Untagged
   m_Icon: {fileID: 0}

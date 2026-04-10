@@ -46,9 +46,13 @@ public class GameManager : MonoBehaviour
         if(Menu.activeSelf == false)
         {
             Menu.SetActive(true);
+            Time.timeScale = 0;
         }
         else
+        {
             Menu.SetActive(false);
+            Time.timeScale = 1;
+        }
     }
 
 
