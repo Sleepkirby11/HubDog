@@ -105,8 +105,12 @@ public class Player : MonoBehaviour
     {
         if (context.started && isGround) //isGround = (+)2단 점프 방지
         {
-            rigid.AddForceY(5, ForceMode2D.Impulse);
+            rigid.AddForceY(10, ForceMode2D.Impulse);
             isGround = false;
+        }
+        if(context.canceled && rigid.linearVelocityY > 0)
+        {
+            rigid.linearVelocityY = 0;
         }
     }
 
