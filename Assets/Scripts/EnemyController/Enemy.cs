@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
         
         currentDelay += Time.fixedDeltaTime; 
 
-        if(currentDelay >= maxDelay)
+        if(currentDelay >= maxDelay && distance >= 4 && distance < 8)
         {
             switch(type)
             {
@@ -98,7 +98,8 @@ public class Enemy : MonoBehaviour
 
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(1);
-        bullet.transform.position = line.GetPosition(0);
+        bullet.GetComponent<EnemyBullet>().target = target;
+        bullet.transform.position = line.GetPosition(0) + new Vector3(0, -0.2f, 0);
         bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, line.GetPosition(1) - transform.position);
     }
 

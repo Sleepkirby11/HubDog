@@ -13,8 +13,8 @@ public class Spawner : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            GameObject enemy = GameManager.instance.pool.Get(5);
-            enemy.transform.position = new Vector3(Random.Range(-5, 5), 8, 0);
+            GameObject enemy = GameManager.instance.pool.Get(4);
+            enemy.transform.position = new Vector3(Random.Range(-5, 5), transform.position.y, 0);
         }
     }
 }

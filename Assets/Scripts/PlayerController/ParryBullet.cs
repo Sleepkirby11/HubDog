@@ -3,7 +3,7 @@ using UnityEngine;
 public class ParryBullet : MonoBehaviour
 {
     Rigidbody2D rigid;
-    public int damage = 5;
+    public int damage;
 
 
     private void Awake()
@@ -21,5 +21,16 @@ public class ParryBullet : MonoBehaviour
         }
     }
 
-
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            collision.gameObject.GetComponent<Enemy>().hp -= damage;
+            gameObject.SetActive(false);
+        }
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }

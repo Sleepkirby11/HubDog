@@ -70,6 +70,12 @@ public class EnemyBullet : MonoBehaviour
                 }
             }
         }
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<Player>().hp -= 1;
+            GameManager.instance.UpdateLifeBar();
+            gameObject.SetActive(false);
+        }
     }
     void ActiveFalse()
     {

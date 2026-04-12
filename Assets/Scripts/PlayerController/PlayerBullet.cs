@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerBullet : MonoBehaviour
 {
     Rigidbody2D rigid;
-
+    public int damage;
 
     private void Awake()
     {
@@ -17,8 +17,15 @@ public class PlayerBullet : MonoBehaviour
     void Update()
     {
         rigid.transform.position += transform.up * Time.deltaTime * 10;
-
-        if (transform.position.y > 10)
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            collision.gameObject.GetComponent<Enemy>().hp -= damage;
+            gameObject.SetActive(false);
+        }
+        if(collision.gameObject.CompareTag("Ground"))
         {
             gameObject.SetActive(false);
         }
