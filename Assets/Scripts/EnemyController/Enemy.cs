@@ -14,7 +14,8 @@ public class Enemy : MonoBehaviour
 
     float nextMove;
 
-    private float distance;
+    private float distanceX;
+    private float distanceY;
 
     public int hp, maxHp;
 
@@ -27,7 +28,8 @@ public class Enemy : MonoBehaviour
         col = GetComponent<BoxCollider2D>();
         line = GetComponent<LineRenderer>();
 
-        distance = 0;
+        distanceX = 0;
+        distanceY = 0;
         currentDelay = 0;
         nextMove = 0;
     }
@@ -39,9 +41,9 @@ public class Enemy : MonoBehaviour
 
         line.SetPosition(1, target.transform.position);
         
-        currentDelay += Time.fixedDeltaTime; 
+        currentDelay += Time.fixedDeltaTime;
 
-        if(currentDelay >= maxDelay && distance >= 4 && distance < 8)
+        if(currentDelay >= maxDelay && distanceX >= 4 && distanceX < 8)
         {
             switch(type)
             {
@@ -69,10 +71,10 @@ public class Enemy : MonoBehaviour
     void DistanceMove()
     {
         //거리 계산
-        distance = Mathf.Abs(target.transform.position.x - this.transform.position.x);
+        distanceX = Mathf.Abs(target.transform.position.x - this.transform.position.x);
         rigid.linearVelocityX = nextMove;
 
-        if (distance >= 4 && distance < 8)
+        if (distanceX >= 4 && distanceX < 8)
         {
             //이동 방향 설정
             if (target.transform.position.x - rigid.position.x < 0)
@@ -84,7 +86,7 @@ public class Enemy : MonoBehaviour
                 nextMove = 5f;
             }
         }
-        else if (distance <= 0.1f)
+        else if (distanceX <= 0.1f)
         {
             nextMove = 0;
         }

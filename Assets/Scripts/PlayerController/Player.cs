@@ -64,7 +64,8 @@ public class Player : MonoBehaviour
             Die();
         }
         if(rigid.linearVelocityY < 0)
-            isGround = Physics2D.BoxCast(col.bounds.center, col.bounds.size * 0.8f, 0, Vector2.down, 0.2f, LayerMask.GetMask("Ground"));
+            isGround = Physics2D.CapsuleCast
+                (col.bounds.center, col.bounds.size, CapsuleDirection2D.Vertical, 0f, Vector2.down, 0.3f, LayerMask.GetMask("Ground"));
     }
 
     //Player Input 시스템을 활용한 플레이어의 움직임 구현
@@ -107,6 +108,7 @@ public class Player : MonoBehaviour
     {
         if (context.started && isGround) //isGround = (+)2단 점프 방지
         {
+            rigid.linearVelocityY = 0;
             rigid.AddForceY(10, ForceMode2D.Impulse);
             isGround = false;
         }
@@ -158,39 +160,23 @@ public class Player : MonoBehaviour
     {
         hp = 0;
     }
-    
-    ////점프 후 착지 판정
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-        
-    //    if(collision.gameObject.CompareTag("Ground"))
-    //    {
-    //        foreach(ContactPoint2D contact in collision.contacts)
-    //        {
-    //            if(contact.normal.y > 0.5f) //접촉 지점의 노멀 벡터가 위쪽을 향할 때만 착지 판정
-    //            {
-    //                isGround = true;
-    //                break;
-    //            }
-    //        }
-    //    }
-    //}
-    ////플랫폼에서 떨어졌을 때 한번 더 체크
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
 
-    //    if (collision.gameObject.CompareTag("Ground"))
-    //    {
-    //        foreach (ContactPoint2D contact in collision.contacts)
-    //        {
-    //            if (contact.normal.y > 0.5f) //접촉 지점의 노멀 벡터가 위쪽을 향할 때만
-    //            {
-    //                isGround = false;
-    //                break;
-    //            }
-    //        }
-    //    }
-    //}
+    //점프 후 착지 판정 보완
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                if (contact.normal.y > 0.5f) //접촉 지점의 노멀 벡터가 위쪽을 향할 때만 착지 판정
+                {
+                    isGround = true;
+                    break;
+                }
+            }
+        }
+    }
 
     //플레이어의 피격 판정(패링 or hp감소)
     private void OnTriggerEnter2D(Collider2D collision)
