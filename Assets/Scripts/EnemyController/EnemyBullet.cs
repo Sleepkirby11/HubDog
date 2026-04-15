@@ -8,6 +8,7 @@ public class EnemyBullet : MonoBehaviour
 
 
     public int type;
+    public int damage;
     bool isGround;
     float speed;
 
@@ -19,6 +20,7 @@ public class EnemyBullet : MonoBehaviour
 
     private void OnEnable()
     {
+        //기본값 초기화
         isGround = false;
         speed = 10;
         rigid.gravityScale = 0;
@@ -41,6 +43,7 @@ public class EnemyBullet : MonoBehaviour
         ActiveFalse();
     }
 
+    //패링 시 eularAngle의 반전값 리턴
     public Vector3 ReverseRotate()
     {
         return new Vector3(0, 0, transform.eulerAngles.z + 180);
@@ -72,11 +75,12 @@ public class EnemyBullet : MonoBehaviour
         }
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<Player>().hp -= 1;
-            GameManager.instance.UpdateLifeBar();
+            collision.gameObject.GetComponent<Player>().Damaged(damage);
             gameObject.SetActive(false);
         }
     }
+
+    //distance 기반 비활성화 함수
     void ActiveFalse()
     {
         if (distance > 15)
@@ -84,6 +88,8 @@ public class EnemyBullet : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+
+    //isGround이 true일 때 Chainsaw 전용 함수
     void shoot_1()
     {
         rigid.AddForce(Vector2.right * speed, ForceMode2D.Force);

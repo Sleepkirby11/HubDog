@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8954464089720389984}
   - component: {fileID: 4221607680447584021}
   - component: {fileID: 2815731603181876474}
-  - component: {fileID: 985264973436807386}
+  - component: {fileID: 3015627547935426055}
   m_Layer: 7
   m_Name: ParryBullet
   m_TagString: ParryBullet
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1216156495
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2bcaf7386b89c6d42aeabbace0012b1c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -177,7 +177,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.4}
   m_Size: {x: 0.5, y: 0.5}
   m_Direction: 0
---- !u!114 &985264973436807386
+--- !u!114 &3015627547935426055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,7 +186,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1743257230995341384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95dd021d3c5bcb24293041197d0ec54b, type: 3}
+  m_Script: {fileID: 11500000, guid: b2c6c4920d5ec9e4bb0f3ae1abbba5b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
+  speed: 20

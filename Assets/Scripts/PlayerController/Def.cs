@@ -1,3 +1,4 @@
+using Unity.Android.Gradle;
 using UnityEngine;
 
 public class Def : MonoBehaviour
@@ -10,27 +11,21 @@ public class Def : MonoBehaviour
     float range = 2f;
     float distance;
 
-    float angle;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //초기화
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        angle = 0;
         target = GameManager.instance.player.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        angle = Mathf.Atan2(mouse.x - target.position.x, mouse.y - target.position.y) * Mathf.Rad2Deg;
+        ShieldTransform();
 
-        this.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
-
-        distance = Vector2.Distance(target.position, mouse);
-
+        //플레이어로부터 반지름 range인 원형 범위 설정 로직
         if (distance > range)
             rigid.transform.position = target.position + (transform.up * range);
         else
@@ -38,4 +33,13 @@ public class Def : MonoBehaviour
     }
 
     
+    void ShieldTransform()
+    {
+        //마우스 위치에 따라 방패의 회전과 위치를 조정하는 함수
+        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        transform.rotation = Quaternion.FromToRotation(Vector3.up, (mouse - (Vector2)target.position));
+
+        distance = Vector2.Distance(target.position, mouse);
+    }
 }

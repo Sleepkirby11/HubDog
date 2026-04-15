@@ -17,18 +17,22 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        //싱글톤 null 체크
         if(instance == null)
             instance = this;
         else
             Destroy(gameObject);
     }
 
+
     // Update is called once per frame
+    //플레이어 currentDelay 시각화
     void LateUpdate()
     {
         delay.value = player.currentDelay / player.FireDelay;
     }
 
+    //HP UI 업데이트
     public void UpdateLifeBar()
     {
         for(int i = 0; i < player.maxHp; i++)
@@ -41,6 +45,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //일시정지 메뉴
     public void ActiveMenu()
     {
         if(Menu.activeSelf == false)
@@ -55,7 +60,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    //종료
     public void OnButtonExit()
     {
         Application.Quit();

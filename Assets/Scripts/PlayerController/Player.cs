@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         //초기화
+        this.gameObject.SetActive(true);
+
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
@@ -45,24 +47,21 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //Player의 이동 로직
         Vector2 nextVec = inputVec * speed;
         rigid.linearVelocityX = nextVec.x;
 
+        //발사 딜레이 계산
             if (currentDelay < FireDelay)
                 currentDelay += Time.fixedDeltaTime;
+
         //패링과 발사 과정을 따로 구분하기 위해 현재 애니메이션 상태 감지 + 발사 텀 체크
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("shoot") && currentDelay >=(FireDelay / 2))
         {
             Shooting();
         }
 
-
-        //체력을 모두 소진했을 때 사망
-        if (hp <= 0)
-        {
-            isParrying = false;
-            Die();
-        }
+        //플레이어 착지 판정 검사
         if(rigid.linearVelocityY < 0)
             isGround = Physics2D.CapsuleCast
                 (col.bounds.center, col.bounds.size, CapsuleDirection2D.Vertical, 0f, Vector2.down, 0.3f, LayerMask.GetMask("Ground"));
@@ -118,6 +117,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Player Input을 활용하여 메뉴 활성화 구현
     public void ActionMenu(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -147,6 +147,7 @@ public class Player : MonoBehaviour
             isShooting = false;
     }
 
+    //총알 발사 함수
     void Shooting()
     {
         // Shoot
@@ -156,9 +157,15 @@ public class Player : MonoBehaviour
         bullet.transform.eulerAngles = Shield.gameObject.transform.eulerAngles;
     }
 
-    void Die()
+    //피격 함수(hp 감소 및 사망 판정)
+    public void Damaged(int damage)
     {
-        hp = 0;
+        hp--;
+        if (hp <= 0)
+        {
+            Time.timeScale = 0;
+            gameObject.SetActive(false);
+        }
     }
 
     //점프 후 착지 판정 보완
@@ -175,17 +182,6 @@ public class Player : MonoBehaviour
                     break;
                 }
             }
-        }
-    }
-
-    //플레이어의 피격 판정(패링 or hp감소)
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.gameObject.CompareTag("EnemyBullet"))
-        {
-            collision.gameObject.SetActive(false);
-            hp--;
-            GameManager.instance.UpdateLifeBar();
         }
     }
 }

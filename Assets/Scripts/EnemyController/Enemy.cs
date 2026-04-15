@@ -43,8 +43,10 @@ public class Enemy : MonoBehaviour
         
         currentDelay += Time.fixedDeltaTime;
 
-        if(currentDelay >= maxDelay && distanceX >= 4 && distanceX < 8)
+        //플레이어 인식, 발사 딜레이 설정 조건식
+        if(currentDelay >= maxDelay && distanceX < 8 && distanceY < 8)
         {
+            //Bullet Type 기반 전용 함수 호출
             switch(type)
             {
                 case 0:
@@ -72,9 +74,11 @@ public class Enemy : MonoBehaviour
     {
         //거리 계산
         distanceX = Mathf.Abs(target.transform.position.x - this.transform.position.x);
+        distanceY = Mathf.Abs(target.transform.position.y - this.transform.position.y);
         rigid.linearVelocityX = nextMove;
 
-        if (distanceX >= 4 && distanceX < 8)
+        //플레이어 인식 범위 설정
+        if (distanceX >= 4 && distanceX < 8 && distanceY < 8)
         {
             //이동 방향 설정
             if (target.transform.position.x - rigid.position.x < 0)
@@ -86,37 +90,45 @@ public class Enemy : MonoBehaviour
                 nextMove = 5f;
             }
         }
+        //멈추는 범위 조건식 설정
         else if (distanceX <= 0.1f)
         {
             nextMove = 0;
         }
     }
 
-    //Shooting
+    //일반 Bullet 전용 함수
     void Shoot_0()
     {
-        Vector2 dir = target.position - transform.position;
-        float rot = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(1);
         bullet.GetComponent<EnemyBullet>().target = target;
+
         bullet.transform.position = line.GetPosition(0) + new Vector3(0, -0.2f, 0);
         bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, line.GetPosition(1) - transform.position);
     }
 
+    //Chainsaw Bullet 전용 함수
     void Shoot_1()
     {
-        Vector2 dir = target.position - transform.position;
-        float rot = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
         currentDelay = 0;
         GameObject bullet = GameManager.instance.pool.Get(2);
-        bullet.transform.position = line.GetPosition(0);
         bullet.GetComponent<EnemyBullet>().target = target;
+
+        bullet.transform.position = line.GetPosition(0);
         bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, 
             (line.GetPosition(1) - transform.position));
-        bullet.transform.eulerAngles += new Vector3(0, 0, Random.Range(-15, 15));
+        bullet.transform.eulerAngles += new Vector3(0, 0, Random.Range(-20, 20));
+    }
+
+    //대미지 계산 함수
+    public void Damaged(int damage)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            Die();
+        }
     }
 
     //Die
@@ -126,21 +138,21 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.CompareTag("PlayerBullet"))
-        {
-            collision.gameObject.SetActive(false);
-            hp--;
-        }
-        if(collision.CompareTag("ParryBullet"))
-        {
-            collision.gameObject.SetActive(false);
-            hp -= collision.gameObject.GetComponent<ParryBullet>().damage;
-        }
-        if (hp <= 0)
-        {
-            Die();
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if(collision.CompareTag("PlayerBullet"))
+    //    {
+    //        collision.gameObject.SetActive(false);
+    //        hp--;
+    //    }
+    //    if(collision.CompareTag("ParryBullet"))
+    //    {
+    //        collision.gameObject.SetActive(false);
+    //        hp -= collision.gameObject.GetComponent<ParryBullet>().damage;
+    //    }
+    //    if (hp <= 0)
+    //    {
+    //        Die();
+    //    }
+    //}
 }
