@@ -53,12 +53,10 @@ public class EnemyBullet : MonoBehaviour
     {
         if (collision.gameObject.tag =="Ground")
         {
-            if (type == 0)
-                gameObject.SetActive(false);
-            else if (type == 1)
+            if (type == 1)
             {
                 if(isGround)
-                    gameObject.SetActive(false);
+                    this.gameObject.SetActive(false);
                 else
                     isGround = true;
                 rigid.gravityScale = 5;
@@ -73,10 +71,17 @@ public class EnemyBullet : MonoBehaviour
                 }
             }
         }
-        if (collision.gameObject.tag == "Player")
+    }
+
+    //Trigger 기반 충돌 감지
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") && type == 0)
+            this.gameObject.SetActive(false);
+        if (collision.gameObject.CompareTag("Player"))
         {
             collision.gameObject.GetComponent<Player>().Damaged(damage);
-            gameObject.SetActive(false);
+            this.gameObject.SetActive(false);
         }
     }
 
@@ -85,7 +90,7 @@ public class EnemyBullet : MonoBehaviour
     {
         if (distance > 15)
         {
-            gameObject.SetActive(false);
+            this.gameObject.SetActive(false);
         }
     }
 

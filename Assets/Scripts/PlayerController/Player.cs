@@ -26,6 +26,8 @@ public class Player : MonoBehaviour
     public bool isParrying;
     private bool isGround;
     public bool isShooting;
+    private bool isParryJump;
+    bool isCanMove;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,6 +43,9 @@ public class Player : MonoBehaviour
         currentDelay = 0;
         isParrying = false;
         isGround = true;
+        isParryJump = false;
+        isCanMove = true;
+
         hp = maxHp;
     }
 
@@ -49,7 +54,8 @@ public class Player : MonoBehaviour
     {
         //Player의 이동 로직
         Vector2 nextVec = inputVec * speed;
-        rigid.linearVelocityX = nextVec.x;
+        if(isCanMove)
+            rigid.linearVelocityX = nextVec.x;
 
         //발사 딜레이 계산
             if (currentDelay < FireDelay)
@@ -72,7 +78,7 @@ public class Player : MonoBehaviour
     {
         if(context.started)
         {
-
+            isCanMove = true;
             anim.SetBool("isWalk", true);
             inputVec = context.ReadValue<Vector2>();
 
@@ -111,9 +117,10 @@ public class Player : MonoBehaviour
             rigid.AddForceY(10, ForceMode2D.Impulse);
             isGround = false;
         }
-        if(context.canceled && rigid.linearVelocityY > 0)
+        if(context.canceled)
         {
-            rigid.linearVelocityY = 0;
+            if (rigid.linearVelocityY > 0)
+                rigid.linearVelocityY = 0;
         }
     }
 
@@ -131,11 +138,24 @@ public class Player : MonoBehaviour
     {
         if (currentDelay >= FireDelay)
         {
+            //패링 판정 오브젝트 소환
             currentDelay = 0;
             isParrying = true;
             GameObject Ting = GameManager.instance.pool.Get(6);
             Ting.transform.position = Shield.transform.position;
             Ting.transform.eulerAngles = Shield.transform.eulerAngles;
+
+            //방패의 방향에 따른 이단 점프 기능
+            Vector2 distance = Ting.transform.position - this.transform.position;
+            if(!isGround)
+            {
+                if(isParryJump)
+                {
+                    rigid.AddForce(-distance * 5, ForceMode2D.Impulse);
+                    isParryJump = false;
+                    isCanMove = false;
+                }
+            }
         }
     }
     void OffParry()
@@ -161,6 +181,7 @@ public class Player : MonoBehaviour
     public void Damaged(int damage)
     {
         hp--;
+        GameManager.instance.UpdateLifeBar();
         if (hp <= 0)
         {
             Time.timeScale = 0;
@@ -179,6 +200,8 @@ public class Player : MonoBehaviour
                 if (contact.normal.y > 0.5f) //접촉 지점의 노멀 벡터가 위쪽을 향할 때만 착지 판정
                 {
                     isGround = true;
+                    isCanMove = true;
+                    isParryJump = true;
                     break;
                 }
             }
