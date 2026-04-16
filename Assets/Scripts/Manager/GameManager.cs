@@ -6,7 +6,7 @@ using NUnit.Framework.Internal.Commands;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static GameManager instance = null;
 
     public Player player;
     public PoolManager pool;
@@ -14,14 +14,22 @@ public class GameManager : MonoBehaviour
 
     public GameObject Menu;
     public Slider delay;
+
+    public Goal goal;
+    public TMP_Text goalText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         //싱글톤 null 체크
-        if(instance == null)
+        if (instance == null)
+        {
+            Debug.Log("게임매니저 instance 새로운 할당");
             instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
         else
-            Destroy(gameObject);
+            Destroy(this.gameObject);
+        UpdateScore(0);
     }
 
 
@@ -29,7 +37,8 @@ public class GameManager : MonoBehaviour
     //플레이어 currentDelay 시각화
     void LateUpdate()
     {
-        delay.value = player.currentDelay / player.FireDelay;
+        if(delay != null)
+            delay.value = player.currentDelay / player.FireDelay;
     }
 
     //HP UI 업데이트
@@ -42,6 +51,14 @@ public class GameManager : MonoBehaviour
         for(int i = 0; i < player.hp; i++)
         {
             Lifes[i].gameObject.SetActive(true);
+        }
+    }
+    public void UpdateScore(int score)
+    {
+        if(goal.reQScore > 0)
+        {
+            player.score += score;
+            goalText.text = "처치한 적 " + player.score + " / " + goal.reQScore;
         }
     }
 
@@ -58,6 +75,10 @@ public class GameManager : MonoBehaviour
             Menu.SetActive(false);
             Time.timeScale = 1;
         }
+    }
+    public void NextStage()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     //종료

@@ -12,6 +12,5 @@ public class Spawner : MonoBehaviour
         GameObject enemy = GameManager.instance.pool.Get(spawnID);
         enemy.transform.position = this.transform.position;
     }
-
 }
 

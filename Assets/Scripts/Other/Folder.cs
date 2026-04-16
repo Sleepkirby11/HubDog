@@ -11,7 +11,8 @@ public class Folder : MonoBehaviour
         {
             if(disableObject != null)
                 disableObject.SetActive(false);
-            explorer.SetActive(true);
+            if(explorer != null)
+                explorer.SetActive(true);
         }
     }
 }

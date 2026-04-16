@@ -106,7 +106,9 @@ MonoBehaviour:
   type: 0
   hp: 0
   maxHp: 5
+  speed: 4
   maxDelay: 0.75
+  score: 1
 --- !u!50 &5472957267131842544
 Rigidbody2D:
   serializedVersion: 5

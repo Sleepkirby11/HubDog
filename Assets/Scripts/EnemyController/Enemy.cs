@@ -18,9 +18,12 @@ public class Enemy : MonoBehaviour
     private float distanceY;
 
     public int hp, maxHp;
+    public float speed;
 
     public float maxDelay;
     private float currentDelay;
+
+    public int score;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -83,11 +86,11 @@ public class Enemy : MonoBehaviour
             //이동 방향 설정
             if (target.transform.position.x - rigid.position.x < 0)
             {
-                nextMove = -5f;
+                nextMove = -speed;
             }
             else if(target.transform.position.x - rigid.position.x > 0)
             {
-                nextMove = 5f;
+                nextMove = speed;
             }
         }
         //멈추는 범위 조건식 설정
@@ -135,6 +138,7 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         hp = 0;
+        GameManager.instance.UpdateScore(score);
         gameObject.SetActive(false);
     }
 

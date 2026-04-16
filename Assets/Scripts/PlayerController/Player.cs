@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    Player player;
+
     Rigidbody2D rigid;
     private Vector2 inputVec;
     SpriteRenderer sprite;
@@ -22,16 +24,18 @@ public class Player : MonoBehaviour
     public float speed;
     public int hp;
     public int maxHp;
+    public int score;
 
     public bool isParrying;
-    private bool isGround;
+    public bool isGround;
     public bool isShooting;
-    private bool isParryJump;
+    public bool isParryJump;
     bool isCanMove;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
+        player = this;
         //초기화
         this.gameObject.SetActive(true);
 
@@ -71,6 +75,13 @@ public class Player : MonoBehaviour
         if(rigid.linearVelocityY < 0)
             isGround = Physics2D.CapsuleCast
                 (col.bounds.center, col.bounds.size, CapsuleDirection2D.Vertical, 0f, Vector2.down, 0.3f, LayerMask.GetMask("Ground"));
+
+        //isGround가 true일 때 isCanMovew와 isParryJump의 상태 동일화
+        if (isGround && !isParryJump)
+        {
+            isParryJump = true;
+            isCanMove = true;
+        }
     }
 
     //Player Input 시스템을 활용한 플레이어의 움직임 구현
@@ -151,6 +162,7 @@ public class Player : MonoBehaviour
             {
                 if(isParryJump)
                 {
+                    rigid.linearVelocityY = 0;
                     rigid.AddForce(-distance * 5, ForceMode2D.Impulse);
                     isParryJump = false;
                     isCanMove = false;
@@ -200,11 +212,10 @@ public class Player : MonoBehaviour
                 if (contact.normal.y > 0.5f) //접촉 지점의 노멀 벡터가 위쪽을 향할 때만 착지 판정
                 {
                     isGround = true;
-                    isCanMove = true;
-                    isParryJump = true;
                     break;
                 }
             }
         }
     }
+
 }

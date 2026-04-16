@@ -9,6 +9,7 @@ TagManager:
   - PlayerBullet
   - ParryBullet
   - Enemy
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - CameraBorder
   - Chainsaw
   - Ground
-  - 
+  - EnemyBorder
   - 
   - 
   - 
