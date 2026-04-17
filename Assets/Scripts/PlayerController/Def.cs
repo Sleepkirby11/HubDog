@@ -1,4 +1,3 @@
-using Unity.Android.Gradle;
 using UnityEngine;
 
 public class Def : MonoBehaviour
@@ -41,5 +40,19 @@ public class Def : MonoBehaviour
         transform.rotation = Quaternion.FromToRotation(Vector3.up, (mouse - (Vector2)target.position));
 
         distance = Vector2.Distance(target.position, mouse);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.isTrigger == true
+            && collision.gameObject.CompareTag("EnemyBullet")
+            && GameManager.instance.player.GetFloat("AlwaysParryTime") > 0)
+        {
+            GameObject bullet = GameManager.instance.pool.Get(3);
+            bullet.transform.position = transform.position;
+            bullet.transform.eulerAngles = collision.gameObject.GetComponent<EnemyBullet>().ReverseRotate();
+            collision.gameObject.SetActive(false);
+        }
+
     }
 }

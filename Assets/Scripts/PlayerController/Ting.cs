@@ -22,7 +22,9 @@ public class Ting : MonoBehaviour
     //패링 여부 확인
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("EnemyBullet") && GameManager.instance.player.isParrying)
+        if (collision.isTrigger == true
+            && collision.gameObject.CompareTag("EnemyBullet")
+            && GameManager.instance.player.isParrying)
         {
             GameObject bullet = GameManager.instance.pool.Get(3);
             bullet.transform.position = transform.position;

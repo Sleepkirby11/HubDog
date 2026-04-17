@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    Player player;
-
     Rigidbody2D rigid;
     private Vector2 inputVec;
     SpriteRenderer sprite;
@@ -16,26 +14,28 @@ public class Player : MonoBehaviour
 
     public GameObject Shield;
 
+    private float FireDelay = 0.5f;
+    private float currentDelay;
 
-    public float FireDelay;
-    public float currentDelay;
+    private float ATKspeedTime;
+    private float AlwaysParryTime;
 
 
-    public float speed;
-    public int hp;
-    public int maxHp;
+    private float speed = 5;
+    private int hp;
+    private int maxHp = 5;
     public int score;
 
     public bool isParrying;
-    public bool isGround;
     public bool isShooting;
-    public bool isParryJump;
-    bool isCanMove;
+
+    private bool isGround;
+    private bool isParryJump;
+    private bool isCanMove;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        player = this;
         //초기화
         this.gameObject.SetActive(true);
 
@@ -45,6 +45,8 @@ public class Player : MonoBehaviour
         col = GetComponent<CapsuleCollider2D>();
 
         currentDelay = 0;
+        ATKspeedTime = 0;
+        AlwaysParryTime = 0;
         isParrying = false;
         isGround = true;
         isParryJump = false;
@@ -62,8 +64,28 @@ public class Player : MonoBehaviour
             rigid.linearVelocityX = nextVec.x;
 
         //발사 딜레이 계산
-            if (currentDelay < FireDelay)
+        if (currentDelay < FireDelay)
                 currentDelay += Time.fixedDeltaTime;
+
+        //아이템에 의해 변한 값 n(초) 카운트다운
+        if(ATKspeedTime > 0)
+        {
+            ATKspeedTime -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            ATKspeedTime = 0;
+            FireDelay = 0.5f;
+        }
+        if(AlwaysParryTime > 0)
+        {
+            AlwaysParryTime -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            AlwaysParryTime = 0;
+        }
+
 
         //패링과 발사 과정을 따로 구분하기 위해 현재 애니메이션 상태 감지 + 발사 텀 체크
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("shoot") && currentDelay >=(FireDelay / 2))
@@ -71,17 +93,7 @@ public class Player : MonoBehaviour
             Shooting();
         }
 
-        //플레이어 착지 판정 검사
-        if(rigid.linearVelocityY < 0)
-            isGround = Physics2D.CapsuleCast
-                (col.bounds.center, col.bounds.size, CapsuleDirection2D.Vertical, 0f, Vector2.down, 0.3f, LayerMask.GetMask("Ground"));
-
-        //isGround가 true일 때 isCanMovew와 isParryJump의 상태 동일화
-        if (isGround && !isParryJump)
-        {
-            isParryJump = true;
-            isCanMove = true;
-        }
+        GroundCheck();
     }
 
     //Player Input 시스템을 활용한 플레이어의 움직임 구현
@@ -199,6 +211,68 @@ public class Player : MonoBehaviour
             Time.timeScale = 0;
             gameObject.SetActive(false);
         }
+    }
+
+    //Heal 함수(Hp가 MaxHp를 넘기지 않도록 보정
+    public void Heal(int heal)
+    {
+        hp += heal;
+        if(hp > maxHp)
+            hp = maxHp;
+        GameManager.instance.UpdateLifeBar();
+    }
+
+    //공격 속도 UP함수
+    public void ATKUp(int speed)
+    {
+        FireDelay /= 2f;
+        ATKspeedTime = speed;
+    }
+    public void AlwayDef(int second)
+    {
+        AlwaysParryTime = second;
+    }
+
+    //플레이어 착지 판정 검사
+    void GroundCheck()
+    {
+        if (rigid.linearVelocityY < 0)
+            isGround = Physics2D.CapsuleCast
+                (col.bounds.center, col.bounds.size, CapsuleDirection2D.Vertical, 0f, Vector2.down, 0.2f, LayerMask.GetMask("Ground"));
+
+        //isGround가 true일 때 isCanMovew와 isParryJump의 상태 동일화
+        if (isGround && !isParryJump)
+        {
+            isParryJump = true;
+            isCanMove = true;
+        }
+    }
+
+    //Call By Value
+    public float GetFloat(string name)
+    {
+        if (name == "fireDelay")
+            return FireDelay;
+        if (name == "currentDelay")
+            return currentDelay;
+        if (name == "AlwaysParryTime")
+            return AlwaysParryTime;
+        if (name == "ATKspeedTime")
+            return ATKspeedTime;
+
+        return 0;
+    }
+
+    public int GetInt(string name)
+    {
+        if (name == "hp")
+            return hp;
+        if(name == "maxHp")
+        {
+            return maxHp;
+        }
+
+        return 0;
     }
 
     //점프 후 착지 판정 보완

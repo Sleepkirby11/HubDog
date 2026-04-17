@@ -47,7 +47,10 @@ public class Enemy : MonoBehaviour
         currentDelay += Time.fixedDeltaTime;
 
         //플레이어 인식, 발사 딜레이 설정 조건식
-        if(currentDelay >= maxDelay && distanceX < 8 && distanceY < 8)
+        if(currentDelay >= maxDelay
+            && distanceX < 8
+            && distanceY < 8
+            && target.gameObject.transform.position.y < this.transform.position.y)
         {
             //Bullet Type 기반 전용 함수 호출
             switch(type)
@@ -139,6 +142,9 @@ public class Enemy : MonoBehaviour
     {
         hp = 0;
         GameManager.instance.UpdateScore(score);
+
+        GameObject particle = GameManager.instance.pool.Get(7);
+        particle.gameObject.transform.position = this.transform.position;
         gameObject.SetActive(false);
     }
 

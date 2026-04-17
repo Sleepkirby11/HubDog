@@ -10,6 +10,7 @@ TagManager:
   - ParryBullet
   - Enemy
   - Goal
+  - Shield
   layers:
   - Default
   - TransparentFX
@@ -53,8 +54,14 @@ TagManager:
   - name: Player
     uniqueID: 1234162863
     locked: 0
+  - name: Shield
+    uniqueID: 1455340477
+    locked: 0
   - name: Bullet
     uniqueID: 3078810801
+    locked: 0
+  - name: Item
+    uniqueID: 4224893919
     locked: 0
   - name: Ground
     uniqueID: 2926842695

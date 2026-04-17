@@ -23,9 +23,7 @@ public class GameManager : MonoBehaviour
         //싱글톤 null 체크
         if (instance == null)
         {
-            Debug.Log("게임매니저 instance 새로운 할당");
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
         }
         else
             Destroy(this.gameObject);
@@ -37,18 +35,20 @@ public class GameManager : MonoBehaviour
     //플레이어 currentDelay 시각화
     void LateUpdate()
     {
-        if(delay != null)
-            delay.value = player.currentDelay / player.FireDelay;
+        if(instance != null)
+        {
+            delay.value = player.GetFloat("currentDelay") / player.GetFloat("fireDelay");
+        }
     }
 
     //HP UI 업데이트
     public void UpdateLifeBar()
     {
-        for(int i = 0; i < player.maxHp; i++)
+        for(int i = 0; i < player.GetInt("maxHp"); i++)
         {
             Lifes[i].gameObject.SetActive(false);
         }
-        for(int i = 0; i < player.hp; i++)
+        for(int i = 0; i < player.GetInt("hp"); i++)
         {
             Lifes[i].gameObject.SetActive(true);
         }
@@ -76,6 +76,15 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
         }
     }
+
+    public bool IsPlayerCanGo()
+    {
+        if (player.score >= goal.reQScore)
+            return true;
+        else
+            return false;
+    }
+
     public void NextStage()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);

@@ -5,6 +5,8 @@ public class FollowUI : MonoBehaviour
 {
 
     RectTransform rect;
+
+    public GameObject otherBG;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,5 +17,10 @@ public class FollowUI : MonoBehaviour
     void FixedUpdate()
     {
         rect.position = Camera.main.WorldToScreenPoint(GameManager.instance.player.transform.position);
+
+        if(GameManager.instance.player.GetFloat("ATKspeedTime") > 0)
+            otherBG.SetActive(true);
+        else
+            otherBG.SetActive(false);
     }
 }
