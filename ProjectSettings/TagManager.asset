@@ -11,6 +11,8 @@ TagManager:
   - Enemy
   - Goal
   - Shield
+  - Boss
+  - Ting
   layers:
   - Default
   - TransparentFX

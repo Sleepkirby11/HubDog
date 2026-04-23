@@ -9,7 +9,7 @@ public class Goal : MonoBehaviour
     {
         if (collision.CompareTag("Player") && GameManager.instance.IsPlayerCanGo())
         {
-            GameManager.instance.NextStage();
+            GameManager.instance.NewStage(1);
         }
     }
 }

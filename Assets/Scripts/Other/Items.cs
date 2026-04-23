@@ -31,7 +31,7 @@ public class Items : MonoBehaviour
                     GameManager.instance.player.ATKUp(5);
                     break;
                 case 2:
-                    GameManager.instance.player.AlwayDef(10);
+                    GameManager.instance.player.AlwayDef(7);
                     break;
             }
 

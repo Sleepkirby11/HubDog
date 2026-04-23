@@ -13,12 +13,13 @@ public class Player : MonoBehaviour
     CapsuleCollider2D col;
 
     public GameObject Shield;
+    public GameObject particle_Getitem;
 
-    private float FireDelay = 0.5f;
+    private float fireDelay = 0.5f;
     private float currentDelay;
 
-    private float ATKspeedTime;
-    private float AlwaysParryTime;
+    private float atkSpeedTime;
+    private float alwaysParryTime;
 
 
     private float speed = 5;
@@ -26,15 +27,24 @@ public class Player : MonoBehaviour
     private int maxHp = 5;
     public int score;
 
+    public float FireDelay => fireDelay;
+    public float CurrentDelay => currentDelay;
+    public float ATKSpeedTime => atkSpeedTime;
+    public float AlwaysParryTime => alwaysParryTime;
+    public int Hp => hp;
+    public int MaxHp => maxHp;
+
     public bool isParrying;
     public bool isShooting;
+    public bool isRestrict;
+    public bool isCleared;
 
     private bool isGround;
     private bool isParryJump;
     private bool isCanMove;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    void Start()
     {
         //초기화
         this.gameObject.SetActive(true);
@@ -43,14 +53,18 @@ public class Player : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider2D>();
+        col.enabled = true;
+        rigid.gravityScale = 2;
 
         currentDelay = 0;
-        ATKspeedTime = 0;
-        AlwaysParryTime = 0;
+        atkSpeedTime = 0;
+        alwaysParryTime = 0;
         isParrying = false;
         isGround = true;
         isParryJump = false;
         isCanMove = true;
+        isCleared = false;
+        isRestrict = false;
 
         hp = maxHp;
     }
@@ -58,32 +72,40 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(hp <= 0)
+        {
+            return;
+        }
+
         //Player의 이동 로직
         Vector2 nextVec = inputVec * speed;
-        if(isCanMove)
-            rigid.linearVelocityX = nextVec.x;
+        if(!isRestrict)
+        {
+            if (isCanMove)
+                rigid.linearVelocityX = nextVec.x;
+        }
 
         //발사 딜레이 계산
         if (currentDelay < FireDelay)
                 currentDelay += Time.fixedDeltaTime;
 
         //아이템에 의해 변한 값 n(초) 카운트다운
-        if(ATKspeedTime > 0)
+        if(atkSpeedTime > 0)
         {
-            ATKspeedTime -= Time.fixedDeltaTime;
+            atkSpeedTime -= Time.fixedDeltaTime;
         }
         else
         {
-            ATKspeedTime = 0;
-            FireDelay = 0.5f;
+            atkSpeedTime = 0;
+            fireDelay = 0.5f;
         }
-        if(AlwaysParryTime > 0)
+        if(alwaysParryTime > 0)
         {
-            AlwaysParryTime -= Time.fixedDeltaTime;
+            alwaysParryTime -= Time.fixedDeltaTime;
         }
         else
         {
-            AlwaysParryTime = 0;
+            alwaysParryTime = 0;
         }
 
 
@@ -134,7 +156,12 @@ public class Player : MonoBehaviour
     //Player Input을 활용하여 점프 구현
     public void ActionJump(InputAction.CallbackContext context)
     {
-        if (context.started && isGround) //isGround = (+)2단 점프 방지
+        if (hp <= 0)
+        {
+            return;
+        }
+
+        if (context.started && isGround && !isRestrict) //isGround = (+)2단 점프 방지
         {
             rigid.linearVelocityY = 0;
             rigid.AddForceY(10, ForceMode2D.Impulse);
@@ -159,7 +186,7 @@ public class Player : MonoBehaviour
     //OnParry, OffParry는 각각 Animator에 의해 호출
     void OnParry()
     {
-        if (currentDelay >= FireDelay)
+        if (currentDelay >= fireDelay)
         {
             //패링 판정 오브젝트 소환
             currentDelay = 0;
@@ -204,18 +231,32 @@ public class Player : MonoBehaviour
     //피격 함수(hp 감소 및 사망 판정)
     public void Damaged(int damage)
     {
-        hp--;
+        if(!isCleared)
+            hp -= damage;
         GameManager.instance.UpdateLifeBar();
         if (hp <= 0)
         {
-            Time.timeScale = 0;
-            gameObject.SetActive(false);
+            anim.SetTrigger("isDie");
+            rigid.linearVelocity = Vector2.zero;
+            GameManager.instance.StartCoroutine(GameManager.instance.DieBoth());
+            
+            GameObject deathHit = GameManager.instance.pool.Get(10);
+            deathHit.transform.position = this.transform.position;
+            deathHit.transform.localScale = deathHit.transform.localScale * 3;
+            GameObject superDeath = GameManager.instance.pool.Get(11);
+            superDeath.transform.position = this.transform.position;
         }
+    }
+
+    void Died()
+    {
+        gameObject.SetActive(false);
     }
 
     //Heal 함수(Hp가 MaxHp를 넘기지 않도록 보정
     public void Heal(int heal)
     {
+        ItemParticleRenderer(0);
         hp += heal;
         if(hp > maxHp)
             hp = maxHp;
@@ -225,18 +266,31 @@ public class Player : MonoBehaviour
     //공격 속도 UP함수
     public void ATKUp(int speed)
     {
-        FireDelay /= 2f;
-        ATKspeedTime = speed;
+        ItemParticleRenderer(1);
+        fireDelay /= 2f;
+        atkSpeedTime = speed;
     }
     public void AlwayDef(int second)
     {
-        AlwaysParryTime = second;
+        ItemParticleRenderer(2);
+        alwaysParryTime = second;
+    }
+
+    void ItemParticleRenderer(int type)
+    {
+        particle_Getitem.gameObject.SetActive(true);
+        ParticleSystem.TextureSheetAnimationModule tsa = particle_Getitem.GetComponent<ParticleSystem>().textureSheetAnimation;
+        float nomalizedType = type / (float)tsa.spriteCount;
+
+        tsa.enabled = true;
+        tsa.startFrame = (new ParticleSystem.MinMaxCurve(nomalizedType));
+        tsa.frameOverTime = new ParticleSystem.MinMaxCurve(0);
     }
 
     //플레이어 착지 판정 검사
     void GroundCheck()
     {
-        if (rigid.linearVelocityY < 0)
+        if (rigid.linearVelocityY < 0 || isRestrict)
             isGround = Physics2D.CapsuleCast
                 (col.bounds.center, col.bounds.size, CapsuleDirection2D.Vertical, 0f, Vector2.down, 0.2f, LayerMask.GetMask("Ground"));
 
@@ -246,21 +300,6 @@ public class Player : MonoBehaviour
             isParryJump = true;
             isCanMove = true;
         }
-    }
-
-    //Call By Value
-    public float GetFloat(string name)
-    {
-        if (name == "fireDelay")
-            return FireDelay;
-        if (name == "currentDelay")
-            return currentDelay;
-        if (name == "AlwaysParryTime")
-            return AlwaysParryTime;
-        if (name == "ATKspeedTime")
-            return ATKspeedTime;
-
-        return 0;
     }
 
     public int GetInt(string name)

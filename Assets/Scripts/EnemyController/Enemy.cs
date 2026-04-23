@@ -5,7 +5,6 @@ public class Enemy : MonoBehaviour
 {
     Rigidbody2D rigid;
     BoxCollider2D col;
-    LineRenderer line;
 
     public int type;
 
@@ -29,28 +28,24 @@ public class Enemy : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
-        line = GetComponent<LineRenderer>();
 
         distanceX = 0;
         distanceY = 0;
-        currentDelay = 0;
         nextMove = 0;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        line.SetPosition(0, this.transform.position);
-
-        line.SetPosition(1, target.transform.position);
-        
-        currentDelay += Time.fixedDeltaTime;
+        if(currentDelay < maxDelay)
+            currentDelay += Time.fixedDeltaTime;
 
         //플레이어 인식, 발사 딜레이 설정 조건식
         if(currentDelay >= maxDelay
             && distanceX < 8
             && distanceY < 8
-            && target.gameObject.transform.position.y < this.transform.position.y)
+            && target.gameObject.transform.position.y < this.transform.position.y
+            && type != 2)
         {
             //Bullet Type 기반 전용 함수 호출
             switch(type)
@@ -63,15 +58,19 @@ public class Enemy : MonoBehaviour
                     break;
             }
         }
-
-        DistanceMove();
+        if(type == 2)
+        {
+            FollowMove();
+        }
+        else
+            DistanceMove();
     }
 
     //생성 시 기본값 부여
     private void OnEnable()
     {
         target = GameManager.instance.player.transform;
-
+        currentDelay = 0;
         hp = maxHp;
     }
 
@@ -103,6 +102,17 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void FollowMove()
+    {
+        Vector2 dir = target.position - transform.position;
+        rigid.AddForce(dir * speed, ForceMode2D.Force);
+
+        if(currentDelay >= maxDelay)
+        {
+            Enemy_2_Die();
+        }
+    }
+
     //일반 Bullet 전용 함수
     void Shoot_0()
     {
@@ -110,8 +120,8 @@ public class Enemy : MonoBehaviour
         GameObject bullet = GameManager.instance.pool.Get(1);
         bullet.GetComponent<EnemyBullet>().target = target;
 
-        bullet.transform.position = line.GetPosition(0) + new Vector3(0, -0.2f, 0);
-        bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, line.GetPosition(1) - transform.position);
+        bullet.transform.position = this.transform.position + new Vector3(0, -0.2f, 0);
+        bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, target.position - transform.position);
     }
 
     //Chainsaw Bullet 전용 함수
@@ -121,9 +131,9 @@ public class Enemy : MonoBehaviour
         GameObject bullet = GameManager.instance.pool.Get(2);
         bullet.GetComponent<EnemyBullet>().target = target;
 
-        bullet.transform.position = line.GetPosition(0);
+        bullet.transform.position = this.transform.position + new Vector3(0, -0.2f, 0);
         bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, 
-            (line.GetPosition(1) - transform.position));
+            (target.position - transform.position));
         bullet.transform.eulerAngles += new Vector3(0, 0, Random.Range(-20, 20));
     }
 
@@ -148,21 +158,21 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if(collision.CompareTag("PlayerBullet"))
-    //    {
-    //        collision.gameObject.SetActive(false);
-    //        hp--;
-    //    }
-    //    if(collision.CompareTag("ParryBullet"))
-    //    {
-    //        collision.gameObject.SetActive(false);
-    //        hp -= collision.gameObject.GetComponent<ParryBullet>().damage;
-    //    }
-    //    if (hp <= 0)
-    //    {
-    //        Die();
-    //    }
-    //}
+    void Enemy_2_Die()
+    {
+        GameManager.instance.HitEffectSpawn(this.transform);
+        this.gameObject.SetActive(false);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (type == 2)
+        {
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                collision.gameObject.GetComponent<Player>().Damaged(1);
+                Enemy_2_Die();
+            }
+        }
+    }
 }

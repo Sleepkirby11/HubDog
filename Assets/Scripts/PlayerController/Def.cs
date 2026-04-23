@@ -25,10 +25,10 @@ public class Def : MonoBehaviour
         ShieldTransform();
 
         //플레이어로부터 반지름 range인 원형 범위 설정 로직
-        if (distance > range)
-            rigid.transform.position = target.position + (transform.up * range);
+        if (distance > range || GameManager.instance.player.isRestrict)
+            rigid.position = (Vector2)(target.position + (transform.up * range));
         else
-            rigid.transform.position = mouse;
+            rigid.position = (Vector2)mouse;
     }
 
     
@@ -42,17 +42,17 @@ public class Def : MonoBehaviour
         distance = Vector2.Distance(target.position, mouse);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.isTrigger == true
-            && collision.gameObject.CompareTag("EnemyBullet")
-            && GameManager.instance.player.GetFloat("AlwaysParryTime") > 0)
-        {
-            GameObject bullet = GameManager.instance.pool.Get(3);
-            bullet.transform.position = transform.position;
-            bullet.transform.eulerAngles = collision.gameObject.GetComponent<EnemyBullet>().ReverseRotate();
-            collision.gameObject.SetActive(false);
-        }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.isTrigger == true
+    //        && collision.gameObject.CompareTag("EnemyBullet")
+    //        && GameManager.instance.player.AlwaysParryTime > 0)
+    //    {
+    //        GameObject bullet = GameManager.instance.pool.Get(3);
+    //        bullet.transform.position = transform.position;
+    //        bullet.transform.eulerAngles = collision.gameObject.GetComponent<EnemyBullet>().ReverseRotate();
+    //        collision.gameObject.SetActive(false);
+    //    }
 
-    }
+    //}
 }

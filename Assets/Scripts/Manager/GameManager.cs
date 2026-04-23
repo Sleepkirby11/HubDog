@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using NUnit.Framework.Internal.Commands;
+using System.Collections;
+using Unity.Cinemachine;
+using JetBrains.Annotations;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,8 +30,10 @@ public class GameManager : MonoBehaviour
         }
         else
             Destroy(this.gameObject);
-        UpdateScore(0);
+
+        
     }
+
 
 
     // Update is called once per frame
@@ -37,24 +42,26 @@ public class GameManager : MonoBehaviour
     {
         if(instance != null)
         {
-            delay.value = player.GetFloat("currentDelay") / player.GetFloat("fireDelay");
+            delay.value = player.CurrentDelay / player.FireDelay;
         }
     }
 
     //HP UI 업데이트
     public void UpdateLifeBar()
     {
-        for(int i = 0; i < player.GetInt("maxHp"); i++)
+        for(int i = 0; i < player.MaxHp; i++)
         {
             Lifes[i].gameObject.SetActive(false);
         }
-        for(int i = 0; i < player.GetInt("hp"); i++)
+        for(int i = 0; i < player.Hp; i++)
         {
             Lifes[i].gameObject.SetActive(true);
         }
     }
     public void UpdateScore(int score)
     {
+        if (goal == null)
+            return;
         if(goal.reQScore > 0)
         {
             player.score += score;
@@ -85,14 +92,41 @@ public class GameManager : MonoBehaviour
             return false;
     }
 
-    public void NextStage()
+    public void NewStage(int plusStage)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + plusStage);
     }
 
     //종료
     public void OnButtonExit()
     {
         Application.Quit();
+    }
+
+    public void HitEffectSpawn(Transform spawnTsf)
+    {
+        GameObject hitEffect = GameManager.instance.pool.Get(10);
+        hitEffect.transform.position = spawnTsf.position;
+    }
+
+    public IEnumerator DieBoth()
+    {
+        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(1.5f);
+        Time.timeScale = 1;
+
+        if (player.Hp <= 0)
+        {
+            yield return new WaitForSeconds(5f);
+
+            NewStage(0);
+        }
+        else
+        {
+            
+            yield return new WaitForSeconds(5f);
+
+            NewStage(1);
+        }
     }
 }

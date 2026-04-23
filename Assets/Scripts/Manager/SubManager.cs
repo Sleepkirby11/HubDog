@@ -1,4 +1,6 @@
 using TMPro;
+using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +16,6 @@ public class SubManager : MonoBehaviour
     public Goal localgoal;
     public TMP_Text localgoalText;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         GameManager inst = GameManager.instance;
@@ -25,7 +26,11 @@ public class SubManager : MonoBehaviour
         inst.Lifes = localLifes;
         inst.Menu = localMenu;
         inst.delay = localdelay;
-        inst.goal = localgoal;
-        inst.goalText = localgoalText;
+
+        if (localgoal != null)
+            inst.goal = localgoal;
+        if (localgoalText != null)
+            inst.goalText = localgoalText;
+        inst.UpdateScore(0);
     }
 }

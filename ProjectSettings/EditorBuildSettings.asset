@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Stage_2.unity
     guid: b788e630f03b04e479ec054833c52f6b
   - enabled: 1
+    path: Assets/Scenes/Stage_Boss.unity
+    guid: 64e166726c7049047a3fae0be946c6a4
+  - enabled: 1
     path: Assets/Scenes/GameClear.unity
     guid: cd4219a4a4d568f4ca5d98563f9cb3e0
   m_configObjects:
